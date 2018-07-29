@@ -1,0 +1,19 @@
+{
+    "name": "xenobytezero/youtube-attach",
+    "type": "library",
+
+    "repositories": [ 
+        { 
+            "type": "path", 
+            "url": "./../widget-support",
+            "options": {
+                "symlink": true
+            }
+        } 
+    ], 
+
+    "require": {
+        "xenobytezero/widget-support": "@dev",
+        "google/apiclient": "^2.2"
+    }
+}

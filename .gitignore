@@ -1,0 +1,10 @@
+/.yalc
+/yalc.lock
+/dist
+/node_modules
+/vendor
+src/client_secret\.json
+
+yarn-error\.log
+
+enc_key\.php
