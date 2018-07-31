@@ -55,6 +55,8 @@ class YTSidebar extends Component {
             videos: null,
             currentVideo: null,
 
+            authPanelOpen: true
+
         }
 
         this._authClient = null;
@@ -71,7 +73,7 @@ class YTSidebar extends Component {
                     return new Promise((res,rej) => {
                         gapi.client.init({
                             clientId: gapiCreds.clientId,
-                            apiKey: 'AIzaSyAdmGhE3NF0zRboD97LP5R2ARwJnpZ4280',
+                            apiKey: gapiCreds.apiKey,
                             scope: 'https://www.googleapis.com/auth/youtube.readonly',
                             discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
                         }).then(() => {
@@ -123,6 +125,13 @@ class YTSidebar extends Component {
         })
     }
 
+    _revokeAccess() {
+        return this._wrapApiRequest({
+            path: '/youtube-attach/v1/revokeAccess',
+            method: 'DELETE'
+        })
+    }
+
     _wrapApiRequest(requestObj){
         return new Promise((res, rej) => {
             apiRequest(requestObj) 
@@ -143,9 +152,21 @@ class YTSidebar extends Component {
             })          
     }   
 
+    _deauthorize() {
+        this._revokeAccess()
+            .then(() => {
+                this.setState({isAuthorized: false})
+            })
+    }
+
+
     _onAuthorized() {
 
-        this.setState({isAuthorized: true});
+
+        this.setState({
+            isAuthorized: true,
+            authPanelOpen: false
+        });
 
         this._getVideos();
 
@@ -289,7 +310,8 @@ class YTSidebar extends Component {
             
                 <PanelBody 
                     title={"Authentication - " + (this.state.isAuthorized ? 'Authorized' : 'Not Authorized')}
-                    opened={!this.state.isAuthorized}
+                    opened={this.state.authPanelOpen}
+                    onToggle={() => { this.setState({authPanelOpen: !this.state.authPanelOpen})}}
                 >
                     
                     {!this.state.isAuthorized && [
@@ -298,7 +320,7 @@ class YTSidebar extends Component {
             
                         <button
                             class="button button-primary"
-                            onClick={() => { this._authorise(); }}
+                            onClick={() => { this._authorize(); }}
                         >Authorize With YouTube</button>
 
                     ]}
@@ -309,6 +331,7 @@ class YTSidebar extends Component {
                 
                         <button
                             class="button button-primary"
+                            onClick={() => { this._deauthorize() ; }}
                         >DeAuthorize Plugin</button>
                 
                     ]}

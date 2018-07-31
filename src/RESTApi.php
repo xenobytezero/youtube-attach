@@ -29,6 +29,16 @@ class RESTApi {
             }
         ]);
 
+        register_rest_route('youtube-attach/v1', '/revokeAccess', [
+            'methods' => 'DELETE',
+            'callback' => function() {
+                return Common::revoke_access();
+            },
+            'permission_callback' => function () {
+              return current_user_can('manage_options');
+            }
+        ]);
+
         register_rest_route('youtube-attach/v1', '/authCode', [
             'methods' => 'POST',
             'callback' => function($request) {
