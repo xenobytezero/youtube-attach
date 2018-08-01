@@ -6,6 +6,8 @@ module.exports = function(grunt) {
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-replace');
 
     // Project configuration.
     grunt.initConfig({
@@ -38,17 +40,35 @@ module.exports = function(grunt) {
                         ], 
                         dest: deployDest
                     }
-
-
                 ]
-
             }
+        },
+
+        bump: {
+            options: {
+                push:false
+            }
+        },
+
+        replace: {
+            deployedVersionTag: {
+
+                src: [deployDest + '/index.php'],
+                dest: deployDest + '/index.php',
+
+                options: {
+                    patterns: [{
+                        match: 'releaseVersion',
+                        replacement: '<%= pkg.version %>'
+                    }]
+                }
+            }
+        }
 
 
-      }
     });
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('release', ['bump', 'copy:deploy', 'replace:deployedVersionTag']);
   
   };
