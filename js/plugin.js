@@ -16,7 +16,6 @@ const applyWithSelect = withSelect( ( select ) => {
 	const { getEditedPostAttribute } = select( 'core/editor' );
 
 	return {
-        title: getEditedPostAttribute( 'title' ),
         meta: getEditedPostAttribute( 'meta' )
     };
     
@@ -109,7 +108,6 @@ class YTSidebar extends Component {
             data: {authCode: authCode}
         })
     }
-
 
     _getAccessToken() {
         return this._wrapApiRequest({
