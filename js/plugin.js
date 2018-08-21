@@ -2,8 +2,8 @@ const { registerPlugin } = wp.plugins;
 
 const { __ } = wp.i18n;
 const { PanelBody, Button, withAPIData, Dashicon } = wp.components;
-const { PluginSidebar, PluginPostStatusInfo } = wp.editPost;
-const { Component } = wp.element;
+const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
+const { Component, Fragment } = wp.element;
 const { withSelect, withDispatch, select, dispatch} = wp.data;
 const { compose } = wp.compose;
 
@@ -295,113 +295,120 @@ class YTSidebar extends Component {
 
     render() {
 
-        return <PluginSidebar
-            name="yta-apiKey"
-        >
-        <div class="ytattach-plugin-sidebar">
+        return <Fragment> 
 
-            {(!this.state.isApiReady && !this.state.isLoaded && <h3 class="loading-text">Loading API...</h3>)}
+            <PluginSidebarMoreMenuItem target="yt-attach-sidebar">
+                YouTube Attach
+            </PluginSidebarMoreMenuItem>
 
-            {(this.state.isApiReady && !this.state.isLoaded && <h3 class="loading-text">Getting authentication...</h3>)}
+            <PluginSidebar
+                name="yt-attach-sidebar"
+            >
+            <div class="ytattach-plugin-sidebar">
 
-            {(this.state.isApiReady && this.state.isLoaded && [
-            
-                <PanelBody 
-                    title={"Authentication - " + (this.state.isAuthorized ? 'Authorized' : 'Not Authorized')}
-                    opened={this.state.authPanelOpen}
-                    onToggle={() => { this.setState({authPanelOpen: !this.state.authPanelOpen})}}
-                >
-                    
-                    {!this.state.isAuthorized && [
+                {(!this.state.isApiReady && !this.state.isLoaded && <h3 class="loading-text">Loading API...</h3>)}
 
-                        <p>This plugin requires permission to access your YouTube account</p>,
-            
-                        <button
-                            class="button button-primary"
-                            onClick={() => { this._authorize(); }}
-                        >Authorize With YouTube</button>
+                {(this.state.isApiReady && !this.state.isLoaded && <h3 class="loading-text">Getting authentication...</h3>)}
 
-                    ]}
-
-                    {this.state.isAuthorized && [
-                    
-                        <p>Plugin is already authorised</p>,
+                {(this.state.isApiReady && this.state.isLoaded && [
                 
-                        <button
-                            class="button button-primary"
-                            onClick={() => { this._deauthorize() ; }}
-                        >DeAuthorize Plugin</button>
+                    <PanelBody 
+                        title={"Authentication - " + (this.state.isAuthorized ? 'Authorized' : 'Not Authorized')}
+                        opened={this.state.authPanelOpen}
+                        onToggle={() => { this.setState({authPanelOpen: !this.state.authPanelOpen})}}
+                    >
+                        
+                        {!this.state.isAuthorized && [
+
+                            <p>This plugin requires permission to access your YouTube account</p>,
                 
-                    ]}
+                            <button
+                                class="button button-primary"
+                                onClick={() => { this._authorize(); }}
+                            >Authorize With YouTube</button>
 
-                </PanelBody>,
+                        ]}
 
-                this.state.isAuthorized && 
-                    <PanelBody title="Current Video">
-
-                        {this.state.currentVideo === null && <p>No current video.</p>}
-
-                        {this.state.currentVideo !== null && 
-
-                            <div class="current-video">
-
-                                <h3 class="title">
-                                    <Dashicon icon={this._getPrivacyIcon(this.state.currentVideo)} size='16'/>
-                                    <span>{this.state.currentVideo.title}</span>
-                                </h3>
-
-                                {this._isPostScheduled(this.state.currentVideo) && 
-                                    <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
-                                }
-
-                                <img src={this.state.currentVideo.thumbnail}></img>
-
-                                <button
-                                    class="button button-primary"
-                                    onClick={() => { this._useVideoTitle(); }}
-                                >Use Video Title</button>
-
-                                <button
-                                    class="button button-primary"
-                                    onClick={() => { this._useVideoDescription(); }}
-                                >Add Description To Selected Block</button>
-
-
-                            </div>
-                            
-                        }
+                        {this.state.isAuthorized && [
+                        
+                            <p>Plugin is already authorised</p>,
+                    
+                            <button
+                                class="button button-primary"
+                                onClick={() => { this._deauthorize() ; }}
+                            >DeAuthorize Plugin</button>
+                    
+                        ]}
 
                     </PanelBody>,
 
-                this.state.isAuthorized && 
-                    <PanelBody title="Channel Videos">
+                    this.state.isAuthorized && 
+                        <PanelBody title="Current Video">
 
-                        {this.state.videos === null && <p>Getting video list...</p>}
+                            {this.state.currentVideo === null && <p>No current video.</p>}
 
-                        {this.state.videos !== null && [
-                        
-                            <h3>Recent Videos</h3>,
+                            {this.state.currentVideo !== null && 
 
-                            <ul class="results">
-                                {this.state.videos.map((result, index) => (
-                                    <li>
-                                        <a onClick={() => this._updateSelectedVideo(result.id)}>
-                                            {result.title}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        ]}
+                                <div class="current-video">
 
-                    </PanelBody>
+                                    <h3 class="title">
+                                        <Dashicon icon={this._getPrivacyIcon(this.state.currentVideo)} size='16'/>
+                                        <span>{this.state.currentVideo.title}</span>
+                                    </h3>
 
-            ]
-        
-        )}
+                                    {this._isPostScheduled(this.state.currentVideo) && 
+                                        <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
+                                    }
 
-        </div>
+                                    <img src={this.state.currentVideo.thumbnail}></img>
 
-        </PluginSidebar>
+                                    <button
+                                        class="button button-primary"
+                                        onClick={() => { this._useVideoTitle(); }}
+                                    >Use Video Title</button>
+
+                                    <button
+                                        class="button button-primary"
+                                        onClick={() => { this._useVideoDescription(); }}
+                                    >Add Description To Selected Block</button>
+
+
+                                </div>
+                                
+                            }
+
+                        </PanelBody>,
+
+                    this.state.isAuthorized && 
+                        <PanelBody title="Channel Videos">
+
+                            {this.state.videos === null && <p>Getting video list...</p>}
+
+                            {this.state.videos !== null && [
+                            
+                                <h3>Recent Videos</h3>,
+
+                                <ul class="results">
+                                    {this.state.videos.map((result, index) => (
+                                        <li>
+                                            <a onClick={() => this._updateSelectedVideo(result.id)}>
+                                                {result.title}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ]}
+
+                        </PanelBody>
+
+                ]
+            
+            )}
+
+            </div>
+
+            </PluginSidebar>
+        </Fragment>
 
     }
 

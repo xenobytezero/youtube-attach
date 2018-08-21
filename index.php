@@ -29,8 +29,8 @@ add_action('init', function() {
             'yta-google-api',
             'wp-plugins',
             'wp-components',
+            'wp-element',
             'wp-edit-post',
-            'wp-i18n',
             'wp-data',
             'wp-compose',
             'wp-api-request'
