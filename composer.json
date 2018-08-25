@@ -3,17 +3,14 @@
     "type": "library",
 
     "repositories": [ 
-        { 
-            "type": "path", 
-            "url": "./../widget-support",
-            "options": {
-                "symlink": true
-            }
-        } 
+        {
+            "type": "vcs",
+            "url": "https://github.com/xenobytezero/widget-support"
+        }
     ], 
 
     "require": {
-        "xenobytezero/widget-support": "@dev",
+        "xenobytezero/widget-support": "^1.0.0",
         "google/apiclient": "^2.2"
     }
 }

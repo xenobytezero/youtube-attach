@@ -86,6 +86,7 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('build', ['exec:brunchBuild']);
-    grunt.registerTask('release', ['bump', 'readpkg', 'build', 'copy:deploy', 'replace:deployedVersionTag']);
+    grunt.registerTask('dryRelease', ['build', 'copy:deploy', 'replace:deployedVersionTag'])
+    grunt.registerTask('release', ['bump', 'readpkg', 'dryRelease']);
   
   };

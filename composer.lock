@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c58f41bf1dd3d235451e64d3ce9acfc3",
+    "content-hash": "b00839cee79769c43e00427a3596921b",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -113,16 +113,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.64",
+            "version": "v0.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client-services.git",
-                "reference": "0250aa8cadbe58e790aa07d736b675f3bdd87a1c"
+                "reference": "357a13e6f59e5590071b1d455c0ead482fac65db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/0250aa8cadbe58e790aa07d736b675f3bdd87a1c",
-                "reference": "0250aa8cadbe58e790aa07d736b675f3bdd87a1c",
+                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/357a13e6f59e5590071b1d455c0ead482fac65db",
+                "reference": "357a13e6f59e5590071b1d455c0ead482fac65db",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +146,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2018-06-30T00:22:51+00:00"
+            "time": "2018-08-21T20:23:38+00:00"
         },
         {
             "name": "google/auth",
@@ -691,12 +691,17 @@
         },
         {
             "name": "xenobytezero/widget-support",
-            "version": "9999999-dev",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xenobytezero/widget-support.git",
+                "reference": "a36e68c7fe535c06ff3834ae19de7d2a5dc542f9"
+            },
             "dist": {
-                "type": "path",
-                "url": "./../widget-support",
-                "reference": "eb7b86cf3b817f6cdec1342bec1d238b40d67f22",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/xenobytezero/widget-support/zipball/a36e68c7fe535c06ff3834ae19de7d2a5dc542f9",
+                "reference": "a36e68c7fe535c06ff3834ae19de7d2a5dc542f9",
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -704,17 +709,17 @@
                     "WidgetSupport\\": "src/"
                 }
             },
-            "transport-options": {
-                "symlink": true
-            }
+            "support": {
+                "source": "https://github.com/xenobytezero/widget-support/tree/1.0.0",
+                "issues": "https://github.com/xenobytezero/widget-support/issues"
+            },
+            "time": "2018-07-29T18:59:43+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "xenobytezero/widget-support": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
