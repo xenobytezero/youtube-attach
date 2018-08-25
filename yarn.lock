@@ -1399,6 +1399,10 @@ grunt-contrib-copy@^1.0.0:
     chalk "^1.1.1"
     file-sync-cmp "^0.1.0"
 
+grunt-exec@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/grunt-exec/-/grunt-exec-3.0.0.tgz#881f868d64098788fddaf22fa25d8572a9d64dc7"
+
 grunt-known-options@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/grunt-known-options/-/grunt-known-options-1.1.0.tgz#a4274eeb32fa765da5a7a3b1712617ce3b144149"
@@ -2106,9 +2110,9 @@ node-sass-globbing@0.0.23:
   dependencies:
     glob "^5.0.5"
 
-node-sass-import-once@^1.2.0:
+"node-sass-import-once@https://github.com/xenobytezero/node-sass-import-once.git":
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/node-sass-import-once/-/node-sass-import-once-1.2.0.tgz#4e523aa05d68d9b37c7ebacf3f15684e635b2f2e"
+  resolved "https://github.com/xenobytezero/node-sass-import-once.git#1aa34892447a19efe156a012a64b1bd2c23f7fa3"
   dependencies:
     js-yaml "^3.2.7"
 
@@ -2591,8 +2595,9 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
 
-"sass-brunch@file:.yalc/sass-brunch":
-  version "2.10.4-508899ce"
+"sass-brunch@https://github.com/xenobytezero/sass-brunch.git":
+  version "2.10.4"
+  resolved "https://github.com/xenobytezero/sass-brunch.git#cd18b7b194ab289c93d5e710ce1c1bdfba0a08b1"
   dependencies:
     anymatch "~2.0.0"
     micro-promisify "~0.1.1"

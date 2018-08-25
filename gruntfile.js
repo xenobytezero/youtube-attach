@@ -81,6 +81,7 @@ module.exports = function(grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('release', ['bump', 'copy:deploy', 'replace:deployedVersionTag']);
+    grunt.registerTask('build', ['exec:brunchBuild']);
+    grunt.registerTask('release', ['build', 'bump', 'copy:deploy', 'replace:deployedVersionTag']);
   
   };
