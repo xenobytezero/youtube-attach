@@ -80,8 +80,12 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('readpkg', 'Read in the package.json file', function() {
+        grunt.config.set('pkg', grunt.file.readJSON('./package.json'));
+    });
+
     // Default task(s).
     grunt.registerTask('build', ['exec:brunchBuild']);
-    grunt.registerTask('release', ['build', 'bump', 'copy:deploy', 'replace:deployedVersionTag']);
+    grunt.registerTask('release', ['bump', 'readpkg', 'build', 'copy:deploy', 'replace:deployedVersionTag']);
   
   };
