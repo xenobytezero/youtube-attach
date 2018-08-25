@@ -8,11 +8,22 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-replace');
+    grunt.loadNpmTasks('grunt-exec');
 
     // Project configuration.
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
+
+        exec: {
+            options: {
+            },
+
+            brunchBuild: {
+                command: 'brunch b'
+            }
+            
+        },
 
         copy: {
         
@@ -25,6 +36,7 @@ module.exports = function(grunt) {
 
                     // Composer
                     {src: ['composer.json', 'composer.lock'], dest: deployDest},
+                    {src: ['vendor/**/*'], dest: deployDest},
 
                     // JS
                     {src: ['dist/js/**/*.js'], dest: deployDest},
