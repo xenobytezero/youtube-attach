@@ -196,7 +196,7 @@ class YTSidebar extends Component {
         }
 
         dis.updateBlockAttributes(
-            selectedBlock.uid,
+            selectedBlock.clientId,
             {content: this.state.currentVideo.description}
         );
 
