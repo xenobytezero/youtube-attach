@@ -1,6 +1,6 @@
 {
   "name": "youtube-attach",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Wordpress plugin for attaching YouTube video information to a post",
   "dependencies": {
     "babel-brunch": "^6.1.1",
