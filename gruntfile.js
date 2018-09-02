@@ -36,7 +36,11 @@ module.exports = function(grunt) {
 
                     // Composer
                     {src: ['composer.json', 'composer.lock'], dest: deployDest},
-                    {src: ['vendor/**/*'], dest: deployDest},
+                    {src: [
+                        'vendor/**/*',  
+                        '!vendor/google/apiclient-services/src/Google/Service/!(YouTube|YouTubeAnalytics|YouTubeReporting)/**/*',
+                        '!vendor/google/apiclient-services/src/Google/Service/!(YouTube.php|YouTubeAnalytics.php|YouTubeReporting.php)*'
+                    ], dest: deployDest},
 
                     // JS
                     {src: ['dist/js/**/*.js'], dest: deployDest},
