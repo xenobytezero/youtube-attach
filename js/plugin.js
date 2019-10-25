@@ -27,16 +27,14 @@ const applyWithDispatch = withDispatch( ( dispatch, { meta } ) => {
 
 	return {
 		updateMeta( newMeta ) {
-			editPost( { meta: Object.assign(meta, newMeta) } ); // Important: Old and new meta need to be merged in a non-mutating way!
+			editPost( { meta: newMeta } );
         },
         updatePostTitle(newTitle) {
-            editPost( { title: newTitle } ); // Important: Old and new meta need to be merged in a non-mutating way!
+            editPost( { title: newTitle } );
         }
     };
     
 } );
-
-
 
 class YTSidebar extends Component {
 
@@ -390,7 +388,7 @@ class YTSidebar extends Component {
 
                                 <ul class="results">
                                     {this.state.videos.map((result, index) => (
-                                        <li>
+                                        <li key={result.id}>
                                             <a onClick={() => this._updateSelectedVideo(result.id)}>
                                                 {result.title}
                                             </a>
