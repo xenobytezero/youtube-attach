@@ -11,10 +11,9 @@
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
-    "babel-brunch": "^6.1.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
-    "grunt": "^1.0.3",
+    "grunt": "^1.2.1",
     "grunt-bump": "^0.8.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^3.0.0",
@@ -22,7 +21,6 @@
     "mini-css-extract-plugin": "^0.10.0",
     "node-sass-import-once": "git+https://github.com/xenobytezero/node-sass-import-once.git",
     "sass": "^1.26.10",
-    "sass-brunch": "https://github.com/xenobytezero/sass-brunch.git",
     "webpack-fix-style-only-entries": "^0.5.1"
   },
   "devDependencies": {
