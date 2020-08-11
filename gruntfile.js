@@ -16,11 +16,8 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         exec: {
-            options: {
-            },
-
-            brunchBuild: {
-                command: 'brunch b'
+            build: {
+                command: 'npm run build'
             }
             
         },
@@ -35,18 +32,14 @@ module.exports = function(grunt) {
                     {src: ['src/**/*.php'], dest: deployDest},
 
                     // Composer
-                    {src: ['composer.json', 'composer.lock'], dest: deployDest},
                     {src: [
                         'vendor/**/*',  
                         '!vendor/google/apiclient-services/src/Google/Service/!(YouTube|YouTubeAnalytics|YouTubeReporting)/**/*',
                         '!vendor/google/apiclient-services/src/Google/Service/!(YouTube.php|YouTubeAnalytics.php|YouTubeReporting.php)*'
                     ], dest: deployDest},
 
-                    // JS
-                    {src: ['dist/js/**/*.js'], dest: deployDest},
-
-                    // CSS
-                    {src: ['dist/css/**/*.css'], dest: deployDest},
+                    // Dist
+                    {src: ['dist/**/*.js'], dest: deployDest},
 
                     // Other
                     {
@@ -89,7 +82,7 @@ module.exports = function(grunt) {
     });
 
     // Default task(s).
-    grunt.registerTask('build', ['exec:brunchBuild']);
+    grunt.registerTask('build', ['exec:build']);
     grunt.registerTask('dryRelease', ['build', 'copy:deploy', 'replace:deployedVersionTag'])
     grunt.registerTask('release', ['bump', 'readpkg', 'dryRelease']);
   

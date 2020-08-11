@@ -19,7 +19,6 @@
     "grunt-exec": "^3.0.0",
     "grunt-replace": "^1.0.1",
     "mini-css-extract-plugin": "^0.10.0",
-    "node-sass-import-once": "git+https://github.com/xenobytezero/node-sass-import-once.git",
     "sass": "^1.26.10",
     "webpack-fix-style-only-entries": "^0.5.1"
   },
