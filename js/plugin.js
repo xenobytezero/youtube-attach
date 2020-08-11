@@ -1,10 +1,10 @@
 const { registerPlugin } = wp.plugins;
 
 const { __ } = wp.i18n;
-const { PanelBody, Button, withAPIData, Dashicon } = wp.components;
+const { PanelBody, Button, withAPIData, Dashicon, TextControl, TabPanel, Notice } = wp.components;
 const { PluginSidebar, PluginSidebarMoreMenuItem } = wp.editPost;
 const { Component, Fragment } = wp.element;
-const { withSelect, withDispatch, select, dispatch} = wp.data;
+const { withSelect, withDispatch, select, dispatch } = wp.data;
 const { compose } = wp.compose;
 
 const apiRequest = wp.apiRequest;
@@ -52,6 +52,15 @@ class YTSidebar extends Component {
             videos: null,
             currentVideo: null,
 
+            errorMessage: null,
+
+            search: {
+                term: '',
+                panelOpen: false,
+                results: null,
+                isSearching: false
+            },
+
             authPanelOpen: true
 
         }
@@ -97,7 +106,9 @@ class YTSidebar extends Component {
         });
     }
 
-
+    _setSearchState(state) {
+        this.setState({search: {...this.state.search, ...state}})
+    }
 
     _sendAuthCode(authCode) {
         return this._wrapApiRequest({
@@ -164,8 +175,6 @@ class YTSidebar extends Component {
             authPanelOpen: false
         });
 
-        this._getVideos();
-
         let videoId = this.props.meta[META_KEY];
         if (videoId !== ''){
             this._getVideoInfo(videoId);
@@ -205,7 +214,9 @@ class YTSidebar extends Component {
         this._getVideoInfo(videoId);
     }
 
-    _getVideos() {
+    _getRecentVideos() {
+
+        console.log('Fetching recent...');
 
         gapi.client.youtube.search.list({
             part: 'snippet',
@@ -213,8 +224,7 @@ class YTSidebar extends Component {
             maxResults: 10,
             order: 'date',
             type: 'video'
-        })
-        .then((response) => {
+        }).then((response) => {
 
             let videoList = response.result.items.map((item) => {
                 return {
@@ -226,6 +236,8 @@ class YTSidebar extends Component {
 
             this.setState({videos: videoList});
 
+        }).catch((err) => {
+            this._handleError(err);
         })
 
     }
@@ -235,8 +247,7 @@ class YTSidebar extends Component {
         gapi.client.youtube.videos.list({
             part: 'snippet, status',
             id: videoId
-        })
-        .then((response) => {
+        }).then((response) => {
 
             let item = response.result.items[0];
 
@@ -248,8 +259,45 @@ class YTSidebar extends Component {
                 description: item.snippet.description
             }});
 
+        }).catch((err) => {
+            this._handleError(err);
         })
 
+
+    }
+
+    _searchForVideo(queryStr) {
+
+        this._setSearchState({
+            isSearching: true,
+            results: null
+        })
+
+        gapi.client.youtube.search.list({
+            part: 'snippet',
+            forMine: true,
+            maxResults: 10,
+            order: 'date',
+            type: 'video',
+            q: queryStr
+        }).then((response) => {
+
+            let videoList = response.result.items.map((item) => {
+                return {
+                    title: item.snippet.title,
+                    id: item.id.videoId,
+
+                }
+            })
+
+            this._setSearchState({
+                isSearching: false,
+                results: videoList
+            });
+
+        }).catch((err) => {
+            this._handleError(err);
+        })
 
     }
 
@@ -290,6 +338,35 @@ class YTSidebar extends Component {
         })
     }
 
+    _handleError(err) {
+        this.setState({errorMessage: err.result.error.message});
+    }
+
+    _onSearchBoxKeyPress(e) {
+        if (e.key === 'Enter') { 
+            this._searchForVideo(this.state.search.term); 
+        }
+    }
+
+    _onSearchResultClicked(result) {
+
+        this._updateSelectedVideo(result.id)
+
+        this._setSearchState({
+            results: null,
+            term: ''
+        });
+    }
+
+    _onTabSelected(tabName) {
+        
+        if (tabName === 'recent') {
+            if (this.state.videos === null) {
+                this._getRecentVideos();
+            }
+        }
+    
+    }
 
     render() {
 
@@ -303,6 +380,13 @@ class YTSidebar extends Component {
                 name="yt-attach-sidebar"
             >
             <div class="ytattach-plugin-sidebar">
+
+                {(this.state.errorMessage !== null && 
+                    <Notice
+                        status="error"
+                        onRemove={() => { this.setState({errorMessage: null}); }}
+                    >{this.state.errorMessage}</Notice>
+                )}
 
                 {(!this.state.isApiReady && !this.state.isLoaded && <h3 class="loading-text">Loading API...</h3>)}
 
@@ -340,72 +424,138 @@ class YTSidebar extends Component {
 
                     </PanelBody>,
 
-                    this.state.isAuthorized && 
-                        <PanelBody title="Current Video">
+                    this.state.isAuthorized && <Fragment>
 
-                            {this.state.currentVideo === null && <p>No current video.</p>}
+                        {this.state.currentVideo === null && <Fragment>
+                            <div class="no-video">
+                                <span>No Video</span>
+                            </div>
+                        </Fragment>}
 
-                            {this.state.currentVideo !== null && 
+                        {this.state.currentVideo !== null && <div class="current-video">
 
-                                <div class="current-video">
+                                <h3 class="title">
+                                    <Dashicon className={'loading-spinner'} icon={this._getPrivacyIcon(this.state.currentVideo)} size='16'/>
+                                    <span>{this.state.currentVideo.title}</span>
+                                </h3>
 
-                                    <h3 class="title">
-                                        <Dashicon icon={this._getPrivacyIcon(this.state.currentVideo)} size='16'/>
-                                        <span>{this.state.currentVideo.title}</span>
-                                    </h3>
+                                {this._isPostScheduled(this.state.currentVideo) && 
+                                    <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
+                                }
 
-                                    {this._isPostScheduled(this.state.currentVideo) && 
-                                        <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
-                                    }
+                                <img src={this.state.currentVideo.thumbnail}></img>
 
-                                    <img src={this.state.currentVideo.thumbnail}></img>
+                                <button
+                                    class="button button-primary"
+                                    onClick={() => { this._useVideoTitle(); }}
+                                >Use Video Title</button>
 
-                                    <button
-                                        class="button button-primary"
-                                        onClick={() => { this._useVideoTitle(); }}
-                                    >Use Video Title</button>
-
-                                    <button
-                                        class="button button-primary"
-                                        onClick={() => { this._useVideoDescription(); }}
-                                    >Add Description To Selected Block</button>
+                                <button
+                                    class="button button-primary"
+                                    onClick={() => { this._useVideoDescription(); }}
+                                >Add Description To Selected Block</button>
 
 
-                                </div>
-                                
-                            }
-
-                        </PanelBody>,
-
-                    this.state.isAuthorized && 
-                        <PanelBody title="Channel Videos">
-
-                            {this.state.videos === null && <p>Getting video list...</p>}
-
-                            {this.state.videos !== null && [
+                            </div>
                             
-                                <h3>Recent Videos</h3>,
+                        }
 
-                                <ul class="results">
-                                    {this.state.videos.map((result, index) => (
-                                        <li key={result.id}>
-                                            <a onClick={() => this._updateSelectedVideo(result.id)}>
-                                                {result.title}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
+                        <hr class="main-hr"/>
+
+                        <TabPanel className='tab-panel'
+                            onSelect={(tabName) => { this._onTabSelected(tabName); }}
+                            tabs={[
+                                {
+                                    name: 'search',
+                                    title: 'Search',
+                                    className: 'tab-search'
+                                },
+                                {
+                                    name: 'recent',
+                                    title: 'Recent',
+                                    className: 'tab-recent'
+                                }
                             ]}
+                        
+                        >
+                            {( tab ) => {
 
-                        </PanelBody>
+                                const recent = <Fragment><div class={'tab ' + tab.className + '-panel'}>
+
+                                    {this.state.videos === null && <p>Getting video list...</p>}
+
+                                    {this.state.videos !== null && [
+                                        <ul class="result-list">
+                                            {this.state.videos.map((result, index) => (
+                                                <li key={result.id}>
+                                                    <a onClick={() => this._updateSelectedVideo(result.id)}>
+                                                        {result.title}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ]}
+
+                                </div></Fragment>
+
+                                const search = <Fragment><div class={'tab ' + tab.className + '-panel'}>
+
+                                    <TextControl
+                                        className='search-input'
+                                        value={this.state.searchTerm}
+                                        onChange={(val) => { this._setSearchState({term: val}); }}
+                                        onKeyPress={(e) => { this._onSearchBoxKeyPress(e); }}
+                                    />
+
+                                    <Button
+                                        className='search-button'
+                                        isPrimary
+                                        isBusy={this.state.search.isSearching}
+                                        label='Search'
+                                        onClick={() => { this._searchForVideo(this.state.search.term); } }
+                                        onKeyPress={(e) => { this._onSearchBoxKeyPress(e); }}
+                                    >Search</Button>
+
+                                    {this.state.search.results !== null && <Fragment>
+                                        
+                                        <hr/>
+
+                                        {this.state.search.results !== null && this.state.search.results.length === 0 && <h3 class="pholder">No Results</h3>}
+
+                                        {this.state.search.results !== null && this.state.search.results.length !== 0 && <Fragment>
+
+                                            <ul class="result-list">
+                                                {this.state.search.results.map((result, index) => (
+                                                    <li key={index}><a onClick={() => this._onSearchResultClicked(result)}>
+                                                        {result.title}
+                                                    </a></li>
+                                                ))}
+                                            </ul>
+
+                                        </Fragment>}
+
+                                    </Fragment>}
+
+                                </div></Fragment>
+                                
+                                if (tab.name === 'recent') {
+                                    return recent;
+                                } else {
+                                    return search;
+                                }
+
+                            }}
+
+                        </TabPanel>
+
+                    </Fragment>
 
                 ]
             
             )}
 
-            </div>
+            </div></PluginSidebar>
 
-            </PluginSidebar>
         </Fragment>
 
     }

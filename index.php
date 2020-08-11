@@ -24,7 +24,7 @@ add_action('init', function() {
 
     wp_register_script(
         'yta-plugin',
-        plugins_url('/dist/js/plugin.js', __FILE__),
+        plugins_url('/dist/plugin/plugin.build.js', __FILE__),
         [
             'yta-google-api',
             'wp-plugins',
@@ -44,7 +44,7 @@ add_action('init', function() {
 
     wp_register_style(
         'yta-plugin-sidebar',
-        plugins_url('/dist/css/yt-attach-sidebar.css', __FILE__)
+        plugins_url('/dist/plugin/plugin.editor.css', __FILE__)
     );
 
 });

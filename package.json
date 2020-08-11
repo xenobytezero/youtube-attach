@@ -2,7 +2,15 @@
   "name": "youtube-attach",
   "version": "0.8.3",
   "description": "Wordpress plugin for attaching YouTube video information to a post",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --config ./webpack.config.js --mode development --display-modules --watch",
+    "build": "webpack --config ./webpack.config.js --mode development --display-modules"
+  },
   "dependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
     "babel-brunch": "^6.1.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
@@ -11,8 +19,17 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^3.0.0",
     "grunt-replace": "^1.0.1",
-    "node-sass-import-once": "https://github.com/xenobytezero/node-sass-import-once.git",
-    "sass-brunch": "https://github.com/xenobytezero/sass-brunch.git"
+    "mini-css-extract-plugin": "^0.10.0",
+    "node-sass-import-once": "git+https://github.com/xenobytezero/node-sass-import-once.git",
+    "sass": "^1.26.10",
+    "sass-brunch": "https://github.com/xenobytezero/sass-brunch.git",
+    "webpack-fix-style-only-entries": "^0.5.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.1",
+    "sass-loader": "^9.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
 }
