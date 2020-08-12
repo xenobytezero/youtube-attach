@@ -1,6 +1,6 @@
 {
   "name": "youtube-attach",
-  "version": "0.8.3",
+  "version": "0.9.1",
   "description": "Wordpress plugin for attaching YouTube video information to a post",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
