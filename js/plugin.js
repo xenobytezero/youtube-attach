@@ -327,11 +327,11 @@ class YTSidebar extends Component {
     _getFormattedPublishDate(publishAt){
         var date = new Date(publishAt);
 
-        return date.toLocaleDateString({
+        return date.toDateString({
             year: 'numeric',
             month: 'long', 
             day: 'numeric'
-        }) + ' ' + date.toLocaleTimeString({
+        }) + ' ' + date.toLocaleTimeString('en-GB', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit'
@@ -434,31 +434,29 @@ class YTSidebar extends Component {
 
                         {this.state.currentVideo !== null && <div class="current-video">
 
-                                <h3 class="title">
-                                    <Dashicon className={'loading-spinner'} icon={this._getPrivacyIcon(this.state.currentVideo)} size='16'/>
-                                    <span>{this.state.currentVideo.title}</span>
-                                </h3>
+                            <h3 class="title">
+                                <Dashicon className={'loading-spinner'} icon={this._getPrivacyIcon(this.state.currentVideo)}/>
+                                <span>{this.state.currentVideo.title}</span>
+                            </h3>
 
-                                {this._isPostScheduled(this.state.currentVideo) && 
-                                    <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
-                                }
+                            {this._isPostScheduled(this.state.currentVideo) && 
+                                <p class="scheduled-date"> Scheduled for - {this._getFormattedPublishDate(this.state.currentVideo.publishAt)} </p>
+                            }
 
-                                <img src={this.state.currentVideo.thumbnail}></img>
+                            <img src={this.state.currentVideo.thumbnail}></img>
 
-                                <button
-                                    class="button button-primary"
-                                    onClick={() => { this._useVideoTitle(); }}
-                                >Use Video Title</button>
+                            <Button
+                                isPrimary
+                                onClick={() => { this._useVideoTitle(); }}
+                            ><span>Use Video Title</span></Button>
 
-                                <button
-                                    class="button button-primary"
-                                    onClick={() => { this._useVideoDescription(); }}
-                                >Add Description To Selected Block</button>
+                            <Button
+                                isPrimary
+                                onClick={() => { this._useVideoDescription(); }}
+                            ><span>Add Description To Selected Block</span></Button>
 
 
-                            </div>
-                            
-                        }
+                        </div>}
 
                         <hr class="main-hr"/>
 
