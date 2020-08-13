@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                     ], dest: deployDest},
 
                     // Dist
-                    {src: ['dist/**/*.js'], dest: deployDest},
+                    {src: ['dist/**/*.@(js|css)'], dest: deployDest},
 
                     // Other
                     {
